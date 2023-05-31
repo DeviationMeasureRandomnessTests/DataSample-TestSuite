@@ -1,0 +1,104 @@
+
+========= Summary results of Alphabit =========
+
+ Version:          TestU01 1.2.3
+ File:             biggap10_4_1
+ Number of bits:   1000000000
+ Number of statistics:  17
+ Total CPU time:   00:00:45.79
+
+ All tests were passed
+
+
+
+
+========= Summary results of Alphabit =========
+
+ Version:          TestU01 1.2.3
+ File:             biggap10_4_1
+ Number of bits:   999999488
+ Number of statistics:  17
+ Total CPU time:   00:01:12.70
+
+ All tests were passed
+
+
+
+
+========= Summary results of Alphabit =========
+
+ Version:          TestU01 1.2.3
+ File:             biggap10_4_1
+ Number of bits:   1000000000
+ Number of statistics:  17
+ Total CPU time:   00:00:59.53
+
+ All tests were passed
+
+
+
+
+========= Summary results of Alphabit =========
+
+ Version:          TestU01 1.2.3
+ File:             biggap10_4_1
+ Number of bits:   1000000000
+ Number of statistics:  17
+ Total CPU time:   00:00:53.28
+
+ All tests were passed
+
+
+
+
+========= Summary results of Alphabit =========
+
+ Version:          TestU01 1.2.3
+ File:             biggap10_4_1
+ Number of bits:   1000000000
+ Number of statistics:  17
+ Total CPU time:   00:00:51.65
+
+ All tests were passed
+
+
+
+
+========= Summary results of Alphabit =========
+
+ Version:          TestU01 1.2.3
+ File:             biggap10_4_1
+ Number of bits:   1000000000
+ Number of statistics:  17
+ Total CPU time:   00:00:49.81
+
+ All tests were passed
+
+
+
+
+========= Summary results of Alphabit =========
+
+ Version:          TestU01 1.2.3
+ File:             biggap10_4_1
+ Number of bits:   1000000000
+ Number of statistics:  17
+ Total CPU time:   00:00:48.24
+
+ All tests were passed
+
+
+
+
+========= Summary results of Rabbit =========
+
+ Version:          TestU01 1.2.3
+ File:             biggap10_4_1
+ Number of bits:   1000000000
+ Number of statistics:  40
+ Total CPU time:   00:08:53.61
+
+ All tests were passed
+
+
+
