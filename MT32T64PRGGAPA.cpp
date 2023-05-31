@@ -19,7 +19,7 @@ enum
     F = 1812433253,
 
     U = 11,
-    // 假定 D = 0xFFFFFFFF (此项省略)
+    
 
     S = 7,
     B = 0x9D2C5680,//2636928640
@@ -42,11 +42,11 @@ void srand(const uint32_t seed)
     uint32_t  i, t;
     isInit = 1;
     MT[0] = seed;
-    //对数组的其它元素进行初始化
+    //Initialization
     for (i = 1; i < N; i++)
     {
         t = F * (MT[i - 1] ^ (MT[i - 1] >> (W - 2))) + i;
-        MT[i] = t & 0xffffffff;   //取最后的32位赋给MT[i]
+        MT[i] = t & 0xffffffff;   
     }
     index = N;
 }
@@ -79,20 +79,19 @@ uint32_t Rand()
     }
     uint32_t y;
     y = MT[index];
-    y = y ^ (y >> U);                 //y右移11个bit
-    y = y ^ ((y << S) & B);   //y左移7个bit与2636928640相与，再与y进行异或
-    y = y ^ ((y << T) & C);  //y左移15个bit与4022730752相与，再与y进行异或
-    y = y ^ (y >> L);                 //y右移18个bit再与y进行异或
+    y = y ^ (y >> U);                
+    y = y ^ ((y << S) & B);   
+    y = y ^ ((y << T) & C); 
+    y = y ^ (y >> L);                
     index = index + 1;
     return y;
 }
 int main()
 {
-    srand(20230526);  //设置随机种子
+    srand(20230526);  //Set a seed
     int cnt = 0;
     uint32_t res;
-   // ofstream outputfile("MT500.bin", ios::binary);
-   // uint32_t data[10000] = {};
+   
    
     FILE *fp1;
 	char basename1[20] = "MT32T64PRGGAPA.data";
@@ -166,7 +165,7 @@ int main()
 }
 
    
-   /* for (int i = 0; i < 1000; i++)//辅助对比代码
+   /* for (int i = 0; i < 1000; i++)//Test code for comparison
     {
         res = Rand();
         printf("%d:%u\n",i, res);
@@ -184,17 +183,6 @@ int main()
 997:2752667134
 998:978824302
 999:548926898*/
-//-----HXP 
- /*   for (int i = 0; i < 31250000; i++)
-    {
-        res = Rand();
-        data[i % 10000] = res;
-        if (i % 10000 == 9999) {
-            outputfile.write(reinterpret_cast<char*>(data), sizeof(data));            
-        }
-    }
-   
-    outputfile.close();*/ 
     
     	fclose(fp1); 
 	    return 0;

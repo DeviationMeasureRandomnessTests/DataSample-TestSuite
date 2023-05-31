@@ -15,12 +15,7 @@ typedef struct ProbPair_ ProbPair;
 void Next(ProbPair **p) {
     *p = (*p)->next;
 }
-/*循环赋值，最后一个参数必须是NULL
- *加入有四个参数a,b,c,NULL，则完成
- * temp = a, a = b, b = c, c= temp的操作
- * 注意，传进的参数值须是一个指针
- *
- * */
+
 void CycleAssign(ProbPair**a, ...) {
     va_list ap;
     va_start(ap, a);
@@ -36,27 +31,23 @@ void CycleAssign(ProbPair**a, ...) {
         *first = temp;
     va_end(ap);
 }
-/*初始化概率数值对链表
- *使链表具有一个表头（不存储数据）
- * */
+/*Initialize List */
 void InitLinkList(ProbPair **head) {
     *head = (ProbPair *)malloc(sizeof(ProbPair));
     (*head)->h = -1;
     (*head)->p = -1;
     (*head)->next = NULL;
 }
-/*删除参数Pre所指向的某链表中节点的下一个节点
- *并将后面的节点接上
- * */
+
 void deleteNextOne(ProbPair **Pre) {
     ProbPair *temp = (*Pre)->next;
     (*Pre)->next = temp->next;
     free(temp);
 }
-/*论文中给出的圈乘运算
- * head:概率分布
- * h:随机变量的取值
- * p:概率值
+/*Dot Operation
+ * head:Probability Distribution
+ * h: Value
+ * p: Probability 
  * */
 ProbPair * dot(ProbPair *head, double h, double p) {
     ProbPair *c;
@@ -74,9 +65,7 @@ ProbPair * dot(ProbPair *head, double h, double p) {
     }
     return c;
 }
-/*向链表中插入取值-概率对
- *
- * */
+/*Insert */
 void Insert(ProbPair *head, double h, double p) {
     ProbPair * temp;
     for (temp = head; temp->next != NULL && h > temp->next->h; Next(&temp))
@@ -99,10 +88,7 @@ void Insert(ProbPair *head, double h, double p) {
         temp->next = newPoint;
     }
 }
-/*两个链表的合并操作，即论文中所说关于概率分布的并运算
- *注意到该操作的结果会使head1链表上的节点全部合并到head0上，即该函数结束后，整个head1链表将不复存在
- *
- * */
+/*Union */
 void Union(ProbPair *head0, ProbPair * head1) {
     ProbPair *p0, *p1;
     ProbPair *tail;
@@ -111,7 +97,7 @@ void Union(ProbPair *head0, ProbPair * head1) {
     while (p1->next != NULL) {
         while (p0->next != NULL && p1->next->h > p0->next->h)
             Next(&p0);
-        if (p0->next == NULL) { //追加至其尾
+        if (p0->next == NULL) { 
             p0->next = p1->next;
             break;
         }
@@ -135,8 +121,7 @@ void Union(ProbPair *head0, ProbPair * head1) {
     }
     free(head1);
 }
-/*计算期望
- * */
+/*Calculate Expectation */
 double Expectation(ProbPair *head) {
     double sum = 0.0;
     ProbPair *temp;
@@ -144,8 +129,7 @@ double Expectation(ProbPair *head) {
         sum += temp->h * temp->p;
     return sum;
 }
-/*众数
- * */
+/*Calculate Mode */
 double Mode(ProbPair *head) {
     double h_most = head->next->h;
     double p_most = head->next->p;
@@ -157,8 +141,7 @@ double Mode(ProbPair *head) {
         }
     return h_most;
 }
-/*中位数
- * */
+/*Calculate Median */
 double Median(ProbPair *head) {
     double sum = 0.0;
     ProbPair *temp;
@@ -170,8 +153,7 @@ double Median(ProbPair *head) {
     return temp->h;
 }
 
-/*方差
- * */
+/*Calculate Variance */
 double Variance(ProbPair *head) {
     double sum = 0.0;
     double e = Expectation(head);
@@ -181,8 +163,7 @@ double Variance(ProbPair *head) {
     return sum;
 }
 
-/*计算上分位点
- * 比如sump = 0.1,则计算上10%分位点
+/*Calculate Upper Percentile, for example, sump = 0.1, 10% Upper Percentile
  * */
 double Upper(ProbPair *head, double sump) {
     double sum = 0.0;
@@ -194,8 +175,7 @@ double Upper(ProbPair *head, double sump) {
     }
     return temp->h;
 }
-/*计算下分位点
- * */
+/*Calculate Lower Percentile */
 double Lower(ProbPair *head, double sump) {
     double sum = 0.0;
     ProbPair *temp;
@@ -206,8 +186,7 @@ double Lower(ProbPair *head, double sump) {
     }
     return temp->h;
 }
-/*计算head所表示的概率分布在区间[start, end]中的概率
- * */
+/* Calculate  the Probability of head Prob. Distribution within [start, end] */
 double Fenwei(ProbPair *head, double start, double end) {
     double sum = 0.0;
     ProbPair *temp;
@@ -217,8 +196,7 @@ double Fenwei(ProbPair *head, double start, double end) {
     }
     return sum;
 }
-/*打印概率分布
- * */
+/*Print Probability Distribution */
 void PrintLinkList(ProbPair *head) {
     int i = 0;
     ProbPair *temp;
@@ -232,7 +210,7 @@ void PrintLinkList(ProbPair *head) {
     printf("total: %d items, the sum of probabilities is %f\n", i, sum);
     printf("----------------------------------------------------------\n");
 }
-/*摧毁链表，并释放其所有节点所占内存*/
+/*Free Memory*/
 void destructLinkList(ProbPair *head) {
     ProbPair *del, *temp;
     for (temp = head; temp->next; ) {
@@ -244,9 +222,8 @@ void destructLinkList(ProbPair *head) {
 }
 
 
-/*计算长度为M的二元序列一阶离差和的概率分布，在此过程中会计算出长度为M-2,M-4,......的二元序列一阶离差和的概率分布
- *因此返回的是一个概率分布数组, 返回值是G1, G1[M]才表示长度为M的二元序列一阶离差和的概率分布
- * */
+/* Compute the Probability Distribution of Deviation Measure of order 1, given a blocklength M
+   Return value G1, G1[M] is the Probability Distribution of Deviation Measure of order 1 with blocklength M */
 ProbPair **dm1ProDistribution(int M){
     int i, j, k; 
     ProbPair **G1 = (ProbPair **)malloc(sizeof(ProbPair) * (M+1));
@@ -270,8 +247,7 @@ ProbPair **dm1ProDistribution(int M){
     }
     return G1; 
 }
-/*计算长度为M的二元序列二阶离差和的概率分布
- * */
+/*Compute the Probability Distribution of Deviation Measure of order 2 */
 ProbPair ** dm2ProDistribution(int M){
     int i, j, k; 
     ProbPair **G2 = (ProbPair **)malloc(sizeof(ProbPair) * (M+1));
@@ -297,10 +273,8 @@ ProbPair ** dm2ProDistribution(int M){
     return G2; 
 }
 
-/* 计算长度为M的三角形面积和的概率分布
- * 这里参数必须是偶数
- * 注意在M大于0时得到的概率分布A[M]的所有项概率和是0.5，而不是1
- * */
+/* Compute the Probability Distribution of Area, given the blocklength M, where M is even
+Note that the sum of probability of all items in A[M] is 0.5, not 1 */
 ProbPair ** areaProDistribution(int M){
     if(M & 1){
         printf("M must be even\n"); 
@@ -319,8 +293,7 @@ ProbPair ** areaProDistribution(int M){
 }
 
 
-/*计算跳跃复杂的概率分布
- * */
+/*Compute the Probability Distribution of Jump complexity */
 ProbPair ** jumpProDistribution(int M){
     int i, j, k; 
     ProbPair **J = (ProbPair **)malloc(sizeof(ProbPair) * (M+1));
@@ -340,10 +313,8 @@ ProbPair ** jumpProDistribution(int M){
     }
     return J;     
 }
-/*计算长度为M的二元序列的奇序跳跃和与偶序跳跃和的概率分布
- *由于在计算二者的概率分布时，它们会相互用到对方的概率分布，因此索性将二者的概率分布放在同一函数中计算
- *这样一来，会产生两个链表数组，因此通过改变参数pO和pE所指向的链表数组将结果置于其中
- * */
+/* Compute the Probability Distribution of Odd hop sum, and even hop sum,
+where two list arrays(pO & pE) are included*/
 void ohsEhsProDistribution(int M, ProbPair ***pO, ProbPair***pE){
     int i, j, k; 
     *pO = (ProbPair **)malloc(sizeof(ProbPair) * (M+1));
@@ -379,9 +350,7 @@ void ohsEhsProDistribution(int M, ProbPair ***pO, ProbPair***pE){
 }
 
 
-/*释放链表数组所占的内存
- *
- * */
+/*Free Memory of list array */
 void freeDistributions(ProbPair ** G, int M){
 	int i; 
     for( i = M & 1; i <= M; i+=2)
@@ -391,7 +360,7 @@ void freeDistributions(ProbPair ** G, int M){
 int main(int argc, char**argv) {
     int i, j, k, M;
    
-    /*示例：计算长度为5的二元序列的一阶离差和的概率分布并输出*/
+    
     
     
     M = 436; 
@@ -403,8 +372,7 @@ int main(int argc, char**argv) {
     freeDistributions(G1, M);  
     
 
-    /*示例：计算长度为4的二元序列的二阶离差和的概率分布并输出*/
-    
+    /*Example： Calculate the Probability Distribution of Deviation Measure of order 2, for M=4*/    
     /*
     M = 4; 
     ProbPair **G2 = dm2ProDistribution(M); 
@@ -414,9 +382,7 @@ int main(int argc, char**argv) {
     */
 
 
-
-    /*示例：计算长度为4的二元序列的奇序跳跃和与偶序跳跃和的概率分布*/
-     
+     /*Example： Calculate the Probability Distribution of Odd hop sum and Even hop sum, for M=4*/        
     /*
     M = 4; 
     ProbPair **O, **E; 
@@ -428,8 +394,8 @@ int main(int argc, char**argv) {
     freeDistributions(E, M); 
     */
 
-    /*示例：计算长度为4的二元序列的跳跃复杂度的概率分布并输出 */
-    
+     /*Example： Calculate the Probability Distribution of jump complexity, for M=4*/
+        
     /*
     M = 4; 
     ProbPair **J = jumpProDistribution(M); 
